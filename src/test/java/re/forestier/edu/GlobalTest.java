@@ -18,8 +18,17 @@ public class GlobalTest {
     @Test
     void testAffichageBase() {
         player player = new player("Florian", "Gnognak le Barbare", "ADVENTURER", 200, new ArrayList<>());
-        UpdatePlayer.addXp(player, 20);
-        player.inventory = new ArrayList<>();
+        UpdatePlayer.addXp(player, 1);
+
+        verify(Affichage.afficherJoueur(player));
+    }
+
+    @Test
+    void testAffichageInv() {
+        ArrayList<String> i = new ArrayList<>();
+        i.add("Holy Elixir");
+        player player = new player("Florian", "Gnognak le Barbare", "ADVENTURER", 200, i);
+        UpdatePlayer.addXp(player, 1);
 
         verify(Affichage.afficherJoueur(player));
     }

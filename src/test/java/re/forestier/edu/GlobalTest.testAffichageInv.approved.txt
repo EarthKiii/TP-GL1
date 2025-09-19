@@ -8,3 +8,4 @@ Capacités :
    INT : 2
 
 Inventaire :
+   Holy Elixir
