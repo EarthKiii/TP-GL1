@@ -98,9 +98,9 @@ public class UpdatePlayer {
         return abilitiesPerTypeAndLevel;
     }
 
-    public static boolean addXp(player player, int xp) {
+    public static boolean addXp(Player player, int xp) {
         int currentLevel = player.retrieveLevel();
-        player.xp += xp;
+        player.setXp(player.getXp() + xp);
         int newLevel = player.retrieveLevel();
 
         if (newLevel != currentLevel) {
@@ -108,7 +108,7 @@ public class UpdatePlayer {
             // Give a random object
             ;
             Random random = new Random();
-            player.inventory.add(objectList[random.nextInt(objectList.length - 0) + 0]);
+            player.inventory.add(objectList[random.nextInt(objectList.length)]);
 
             // Add/upgrade abilities to player
             HashMap<String, Integer> abilities = abilitiesPerTypeAndLevel().get(player.getAvatarClass()).get(newLevel);
@@ -121,46 +121,46 @@ public class UpdatePlayer {
     }
 
     // majFinDeTour met à jour les points de vie
-    public static void majFinDeTour(player player) {
-        if(player.currenthealthpoints == 0) {
+    public static void majFinDeTour(Player player) {
+        if(player.getCurrentHP() == 0) {
             System.out.println("Le joueur est KO !");
             return;
         }
 
-        if(player.currenthealthpoints < player.healthpoints/2) {
+        if(player.getCurrentHP() < player.getMaxHP() /2) {
             if(!player.getAvatarClass().equals("ADVENTURER")) {
                 if(player.getAvatarClass().equals("DWARF")) {
                     if(player.inventory.contains("Holy Elixir")) {
-                        player.currenthealthpoints+=1;
+                        player.addHP(1);
                     }
-                    player.currenthealthpoints+=1;
+                    player.addHP(1);
                 } else if(player.getAvatarClass().equals("ADVENTURER")) {
-                    player.currenthealthpoints+=2;
+                    player.addHP(2);
                 }
 
 
                 if(player.getAvatarClass().equals("ARCHER")) {
-                    player.currenthealthpoints+=1;
+                    player.addHP(1);
                     if(player.inventory.contains("Magic Bow")) {
-                        player.currenthealthpoints+=player.currenthealthpoints/8-1;
+                        player.setCurrentHP(player.getCurrentHP() + player.getCurrentHP()/8-1);
                     }
                 }
             } else {
-                player.currenthealthpoints+=2;
+                player.addHP(2);
                 if(player.retrieveLevel() < 3) {
-                    player.currenthealthpoints-=1;
+                    player.removeHP(1);
                 }
             }
-        } else if(player.currenthealthpoints >= player.healthpoints/2){
-            if(player.currenthealthpoints >= player.healthpoints) {
-                player.currenthealthpoints = player.healthpoints;
+        } else if(player.getCurrentHP() >= player.getMaxHP() /2){
+            if(player.getCurrentHP() >= player.getMaxHP()) {
+                player.setCurrentHP(player.getMaxHP());
                 return;
             }
         }
 
 
-        if(player.currenthealthpoints >= player.healthpoints) {
-            player.currenthealthpoints = player.healthpoints;
+        if(player.getCurrentHP() >= player.getMaxHP()) {
+            player.setCurrentHP(player.getMaxHP());
         }
     }
 }

@@ -3,38 +3,36 @@ package re.forestier.edu.rpg;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class player {
-    public String playerName;
-    public String Avatar_name;
-    private String AvatarClass;
+public class Player {
+    private String playerName;
+    private String avatarName;
+    private String avatarClass;
 
-    public Integer money;
-    private Float __real_money__;
+    private int money;
 
-
-    public int level;
-    public int healthpoints;
-    public int currenthealthpoints;
-    protected int xp;
+    private int level;
+    private int maxHP;
+    private int currentHP;
+    private int xp;
 
 
     public HashMap<String, Integer> abilities;
     public ArrayList<String> inventory;
-    public player(String playerName, String avatar_name, String avatarClass, int money, ArrayList<String> inventory) {
+    public Player(String playerName, String avatarName, String avatarClass, int money, ArrayList<String> inventory) {
         if (!avatarClass.equals("ARCHER") && !avatarClass.equals("ADVENTURER") && !avatarClass.equals("DWARF") ) {
             return;
         }
 
         this.playerName = playerName;
-        Avatar_name = avatar_name;
-        AvatarClass = avatarClass;
-        this.money = Integer.valueOf(money);
+        this.avatarName = avatarName;
+        this.avatarClass = avatarClass;
+        this.money = money;
         this.inventory = inventory;
-        this.abilities = UpdatePlayer.abilitiesPerTypeAndLevel().get(AvatarClass).get(1);
+        this.abilities = UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1);
     }
 
     public String getAvatarClass () {
-        return AvatarClass;
+        return avatarClass;
     }
 
     public void removeMoney(int amount) throws IllegalArgumentException {
@@ -42,11 +40,10 @@ public class player {
             throw new IllegalArgumentException("Player can't have a negative money!");
         }
 
-        money = Integer.parseInt(money.toString()) - amount;
+        money -= amount;
     }
     public void addMoney(int amount) {
-        var value = Integer.valueOf(amount);
-        money = money + (value != null ? value : 0);
+        money += amount;
     }
     public int retrieveLevel() {
         // (lvl-1) * 10 + round((lvl * xplvl-1)/4)
@@ -73,7 +70,62 @@ public class player {
         return this.xp;
     }
 
-    /*
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getAvatarName() {
+        return avatarName;
+    }
+
+    public void setAvatarName(String avatarName) {
+        this.avatarName = avatarName;
+    }
+
+    public void setAvatarClass(String avatarClass) {
+        this.avatarClass = avatarClass;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    public void setMaxHP(int maxHP) {
+        this.maxHP = maxHP;
+    }
+
+    public int getCurrentHP() {
+        return currentHP;
+    }
+
+    public void setCurrentHP(int currentHP) {
+        this.currentHP = currentHP;
+    }
+
+    public void addHP(int hp) {
+        if (hp > 0 && currentHP <= maxHP) this.currentHP += hp;
+    }
+
+    public void removeHP(int hp) {
+        if (hp > 0 && currentHP - hp >= 0) this.currentHP -= hp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+/*
     Ингредиенты:
         Для теста:
 

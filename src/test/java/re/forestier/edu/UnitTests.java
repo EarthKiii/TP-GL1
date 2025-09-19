@@ -2,7 +2,7 @@ package re.forestier.edu;
 
 import org.junit.jupiter.api.*;
 import re.forestier.edu.rpg.UpdatePlayer;
-import re.forestier.edu.rpg.player;
+import re.forestier.edu.rpg.Player;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,35 +15,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UnitTests {
-    player getDefaultFlorian() {
-        return new player("Florian", "Grognak le barbare", "ADVENTURER", 100, new ArrayList<>());
+    Player getDefaultFlorian() {
+        return new Player("Florian", "Grognak le barbare", "ADVENTURER", 100, new ArrayList<>());
     }
 
     @Test
     @DisplayName("Unknown class test")
     void testUnknownClass() {
-        player player = new player("Florian", "Grognak le barbare", "MAGE", 100, new ArrayList<>());
+        Player player = new Player("Florian", "Grognak le barbare", "MAGE", 100, new ArrayList<>());
         assertNull(player.getAvatarClass());
     }
 
     @Test
     @DisplayName("Player name test")
     void testPlayerName() {
-        player player = new player("Florian", "Grognak le barbare", "ADVENTURER", 100, new ArrayList<>());
-        assertThat(player.playerName, is("Florian"));
+        Player player = new Player("Florian", "Grognak le barbare", "ADVENTURER", 100, new ArrayList<>());
+        assertThat(player.getPlayerName(), is("Florian"));
     }
 
     @Test
     @DisplayName("Avatar name test")
     void testAvatarName() {
-        player player = getDefaultFlorian();
-        assertThat(player.Avatar_name, is("Grognak le barbare"));
+        Player player = getDefaultFlorian();
+        assertThat(player.getAvatarName(), is("Grognak le barbare"));
     }
 
     @Test
     @DisplayName("Get avatar class test")
     void testGetAvatarClass() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         assertThat(p.getAvatarClass(), is("ADVENTURER"));
     }
@@ -51,15 +51,15 @@ public class UnitTests {
     @Test
     @DisplayName("Get money test")
     void testGetMoney() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
-        assertThat(p.money, is(100));
+        assertThat(p.getMoney(), is(100));
     }
 
     @Test
     @DisplayName("Get inventory test")
     void testGetInventory() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         assertThat(p.inventory.size(), is(0));
     }
@@ -69,7 +69,7 @@ public class UnitTests {
     @Test
     @DisplayName("Impossible to have negative money")
     void testNegativeMoney() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         try {
             p.removeMoney(200);
@@ -82,26 +82,26 @@ public class UnitTests {
     @Test
     @DisplayName("Impossible to have negative money")
     void testRemoveMoney() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         p.removeMoney(100);
-        assertThat(p.money, is(0));
+        assertThat(p.getMoney(), is(0));
     }
 
 
     @Test
     @DisplayName("Money addition test")
     void testAddMoney() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         p.addMoney(200);
-        assertThat(p.money, is(300));
+        assertThat(p.getMoney(), is(300));
     }
 
     @Test
     @DisplayName("Level upgrade test")
     void testLevelUpgrade() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         HashMap<Integer, Integer> levels = new HashMap<>();
         levels.put(2,10); // 1*10 + ((2*0)/4)
@@ -119,7 +119,7 @@ public class UnitTests {
     @Test
     @DisplayName("Low xp gain test")
     void testLowXpGain() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         boolean newLevel = UpdatePlayer.addXp(p, 5);
         assertThat(p.retrieveLevel(), is(1));
@@ -130,7 +130,7 @@ public class UnitTests {
     @Test
     @DisplayName("Test KO")
     void testKO() {
-        player p = getDefaultFlorian();
+        Player p = getDefaultFlorian();
 
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
@@ -145,21 +145,21 @@ public class UnitTests {
         ArrayList<String> i = new ArrayList<>();
         i.add("Holy Elixir");
 
-        player p = new player("Florian", "Grognak le nain", "DWARF", 100, i);
-        p.currenthealthpoints = 1;
-        p.healthpoints = 10;
+        Player p = new Player("Florian", "Grognak le nain", "DWARF", 100, i);
+        p.setCurrentHP(1);
+        p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(3));
+        assertThat(p.getCurrentHP(), is(3));
     }
 
     @Test
     @DisplayName("Dwarf No Potion fin de tour test")
     void testNoPotionInventaire() {
-        player p = new player("Florian", "Grognak le nain", "DWARF", 100, new ArrayList<>());
-        p.currenthealthpoints = 1;
-        p.healthpoints = 10;
+        Player p = new Player("Florian", "Grognak le nain", "DWARF", 100, new ArrayList<>());
+        p.setCurrentHP(1);
+        p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(2));
+        assertThat(p.getCurrentHP(), is(2));
     }
 
     @Test
@@ -168,81 +168,81 @@ public class UnitTests {
         ArrayList<String> i = new ArrayList<>();
         i.add("Magic Bow");
 
-        player p = new player("Florian", "Grognak l'archer", "ARCHER", 100, i);
-        p.currenthealthpoints = 1;
-        p.healthpoints = 10;
+        Player p = new Player("Florian", "Grognak l'archer", "ARCHER", 100, i);
+        p.setCurrentHP(1);
+        p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(1));
+        assertThat(p.getCurrentHP(), is(1));
     }
 
     @Test
     @DisplayName("Archer No Magic Bow fin de tour test")
     void testNoMagicBowInventaire() {
-        player p = new player("Florian", "Grognak l'archer", "ARCHER", 100, new ArrayList<>());
-        p.currenthealthpoints = 1;
-        p.healthpoints = 10;
+        Player p = new Player("Florian", "Grognak l'archer", "ARCHER", 100, new ArrayList<>());
+        p.setCurrentHP(1);
+        p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(2));
+        assertThat(p.getCurrentHP(), is(2));
     }
 
     @Test
     @DisplayName("Low level aventurer fin de tour test")
     void testLowLevelAv() {
-        player p = getDefaultFlorian();
-        p.currenthealthpoints = 1;
-        p.healthpoints = 10;
+        Player p = getDefaultFlorian();
+        p.setCurrentHP(1);
+        p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(2));
+        assertThat(p.getCurrentHP(), is(2));
     }
 
     @Test
     @DisplayName("High level aventurer fin de tour test")
     void testHighLevelAv() {
-        player p = getDefaultFlorian();
-        p.currenthealthpoints = 1;
-        p.healthpoints = 10;
+        Player p = getDefaultFlorian();
+        p.setCurrentHP(1);
+        p.setMaxHP(10);
         UpdatePlayer.addXp(p, 27);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(3));
+        assertThat(p.getCurrentHP(), is(3));
     }
 
     @Test
     @DisplayName("Mid HP aventurer fin de tour test")
     void testMidHpAv() {
-        player p = getDefaultFlorian();
-        p.currenthealthpoints = 2;
-        p.healthpoints = 4;
+        Player p = getDefaultFlorian();
+        p.setCurrentHP(2);
+        p.setMaxHP(4);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(2));
+        assertThat(p.getCurrentHP(), is(2));
     }
 
     @Test
     @DisplayName("Above Mid HP aventurer fin de tour test")
     void testAboveMidHpAv() {
-        player p = getDefaultFlorian();
-        p.currenthealthpoints = 3;
-        p.healthpoints = 4;
+        Player p = getDefaultFlorian();
+        p.setCurrentHP(3);
+        p.setMaxHP(4);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(3));
+        assertThat(p.getCurrentHP(), is(3));
     }
 
     @Test
     @DisplayName("Max HP aventurer fin de tour test")
     void testMaxHpAv() {
-        player p = getDefaultFlorian();
-        p.currenthealthpoints = 4;
-        p.healthpoints = 4;
+        Player p = getDefaultFlorian();
+        p.setCurrentHP(4);
+        p.setMaxHP(4);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(4));
+        assertThat(p.getCurrentHP(), is(4));
     }
 
     @Test
     @DisplayName("Cheater HP aventurer fin de tour test")
     void testCheaterHpAv() {
-        player p = getDefaultFlorian();
-        p.currenthealthpoints = 5;
-        p.healthpoints = 4;
+        Player p = getDefaultFlorian();
+        p.setCurrentHP(5);
+        p.setMaxHP(4);
         UpdatePlayer.majFinDeTour(p);
-        assertThat(p.currenthealthpoints, is(4));
+        assertThat(p.getCurrentHP(), is(4));
     }
 }
