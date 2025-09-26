@@ -1,11 +1,11 @@
 package re.forestier.edu;
 
 import org.junit.jupiter.api.*;
+import re.forestier.edu.rpg.AvatarClass;
 import re.forestier.edu.rpg.UpdatePlayer;
 import re.forestier.edu.rpg.Player;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -16,20 +16,13 @@ import java.util.Map;
 
 public class UnitTests {
     Player getDefaultFlorian() {
-        return new Player("Florian", "Grognak le barbare", "ADVENTURER", 100, new ArrayList<>());
-    }
-
-    @Test
-    @DisplayName("Unknown class test")
-    void testUnknownClass() {
-        Player player = new Player("Florian", "Grognak le barbare", "MAGE", 100, new ArrayList<>());
-        assertNull(player.getAvatarClass());
+        return new Player("Florian", "Grognak le barbare", AvatarClass.ADVENTURER, 100, new ArrayList<>());
     }
 
     @Test
     @DisplayName("Player name test")
     void testPlayerName() {
-        Player player = new Player("Florian", "Grognak le barbare", "ADVENTURER", 100, new ArrayList<>());
+        Player player = new Player("Florian", "Grognak le barbare", AvatarClass.ADVENTURER, 100, new ArrayList<>());
         assertThat(player.getPlayerName(), is("Florian"));
     }
 
@@ -45,7 +38,7 @@ public class UnitTests {
     void testGetAvatarClass() {
         Player p = getDefaultFlorian();
 
-        assertThat(p.getAvatarClass(), is("ADVENTURER"));
+        assertThat(p.getAvatarClass(), is(AvatarClass.ADVENTURER));
     }
 
     @Test
@@ -145,7 +138,7 @@ public class UnitTests {
         ArrayList<String> i = new ArrayList<>();
         i.add("Holy Elixir");
 
-        Player p = new Player("Florian", "Grognak le nain", "DWARF", 100, i);
+        Player p = new Player("Florian", "Grognak le nain", AvatarClass.DWARF, 100, i);
         p.setCurrentHP(1);
         p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
@@ -155,7 +148,7 @@ public class UnitTests {
     @Test
     @DisplayName("Dwarf No Potion fin de tour test")
     void testNoPotionInventaire() {
-        Player p = new Player("Florian", "Grognak le nain", "DWARF", 100, new ArrayList<>());
+        Player p = new Player("Florian", "Grognak le nain", AvatarClass.DWARF, 100, new ArrayList<>());
         p.setCurrentHP(1);
         p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
@@ -168,7 +161,7 @@ public class UnitTests {
         ArrayList<String> i = new ArrayList<>();
         i.add("Magic Bow");
 
-        Player p = new Player("Florian", "Grognak l'archer", "ARCHER", 100, i);
+        Player p = new Player("Florian", "Grognak l'archer", AvatarClass.ARCHER, 100, i);
         p.setCurrentHP(1);
         p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);
@@ -178,7 +171,7 @@ public class UnitTests {
     @Test
     @DisplayName("Archer No Magic Bow fin de tour test")
     void testNoMagicBowInventaire() {
-        Player p = new Player("Florian", "Grognak l'archer", "ARCHER", 100, new ArrayList<>());
+        Player p = new Player("Florian", "Grognak l'archer", AvatarClass.ARCHER, 100, new ArrayList<>());
         p.setCurrentHP(1);
         p.setMaxHP(10);
         UpdatePlayer.majFinDeTour(p);

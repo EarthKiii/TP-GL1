@@ -8,8 +8,8 @@ public class UpdatePlayer {
     private final static String[] objectList = {"Lookout Ring : Prevents surprise attacks","Scroll of Stupidity : INT-2 when applied to an enemy", "Draupnir : Increases XP gained by 100%", "Magic Charm : Magic +10 for 5 rounds", "Rune Staff of Curse : May burn your ennemies... Or yourself. Who knows?", "Combat Edge : Well, that's an edge", "Holy Elixir : Recover your HP"
     };
 
-    public static HashMap<String, HashMap<Integer, HashMap<String, Integer>>> abilitiesPerTypeAndLevel() {
-        HashMap<String, HashMap<Integer, HashMap<String, Integer>>> abilitiesPerTypeAndLevel = new HashMap<>();
+    public static HashMap<AvatarClass, HashMap<Integer, HashMap<String, Integer>>> abilitiesPerTypeAndLevel() {
+        HashMap<AvatarClass, HashMap<Integer, HashMap<String, Integer>>> abilitiesPerTypeAndLevel = new HashMap<>();
 
         HashMap<Integer, HashMap<String, Integer>> adventurerMap = new HashMap<>();
         HashMap<String, Integer> adventurerLevel1 = new HashMap<>();
@@ -38,8 +38,7 @@ public class UpdatePlayer {
         adventurerLevel5.put("DEF", 4);
         adventurerMap.put(5, adventurerLevel5);
 
-        abilitiesPerTypeAndLevel.put("ADVENTURER", adventurerMap);
-
+        abilitiesPerTypeAndLevel.put(AvatarClass.ADVENTURER, adventurerMap);
 
         HashMap<Integer, HashMap<String, Integer>> archerMap = new HashMap<>();
         HashMap<String, Integer> archerLevel1 = new HashMap<>();
@@ -66,8 +65,7 @@ public class UpdatePlayer {
         archerLevel5.put("ATK", 4);
         archerMap.put(5, archerLevel5);
 
-        abilitiesPerTypeAndLevel.put("ARCHER", archerMap);
-
+        abilitiesPerTypeAndLevel.put(AvatarClass.ARCHER, archerMap);
 
         HashMap<Integer, HashMap<String, Integer>> dwarf = new HashMap<>();
         HashMap<String, Integer> dwarfLevel1 = new HashMap<>();
@@ -93,7 +91,7 @@ public class UpdatePlayer {
         dwarfLevel5.put("CHA", 1);
         dwarf.put(5, dwarfLevel5);
 
-        abilitiesPerTypeAndLevel.put("DWARF", dwarf);
+        abilitiesPerTypeAndLevel.put(AvatarClass.DWARF, dwarf);
 
         return abilitiesPerTypeAndLevel;
     }
@@ -122,44 +120,34 @@ public class UpdatePlayer {
 
     // majFinDeTour met à jour les points de vie
     public static void majFinDeTour(Player player) {
-        if(player.getCurrentHP() == 0) {
+        if (player.getCurrentHP() == 0) {
             System.out.println("Le joueur est KO !");
             return;
         }
 
-        if(player.getCurrentHP() < player.getMaxHP() /2) {
-            if(!player.getAvatarClass().equals("ADVENTURER")) {
-                if(player.getAvatarClass().equals("DWARF")) {
-                    if(player.inventory.contains("Holy Elixir")) {
+        if (player.getCurrentHP() < player.getMaxHP() /2) {
+            switch (player.getAvatarClass()) {
+                case ADVENTURER:
+                    player.addHP(2);
+                    if (player.retrieveLevel() < 3) {
+                        player.removeHP(1);
+                    }
+                    break;
+                case DWARF:
+                    player.addHP(1);
+                    if (player.inventory.contains("Holy Elixir")) {
                         player.addHP(1);
                     }
+                    break;
+                case ARCHER:
                     player.addHP(1);
-                } else if(player.getAvatarClass().equals("ADVENTURER")) {
-                    player.addHP(2);
-                }
-
-
-                if(player.getAvatarClass().equals("ARCHER")) {
-                    player.addHP(1);
-                    if(player.inventory.contains("Magic Bow")) {
-                        player.setCurrentHP(player.getCurrentHP() + player.getCurrentHP()/8-1);
+                    if (player.inventory.contains("Magic Bow")) {
+                        player.setCurrentHP(player.getCurrentHP() + player.getCurrentHP() / 8 - 1);
                     }
-                }
-            } else {
-                player.addHP(2);
-                if(player.retrieveLevel() < 3) {
-                    player.removeHP(1);
-                }
-            }
-        } else if(player.getCurrentHP() >= player.getMaxHP() /2){
-            if(player.getCurrentHP() >= player.getMaxHP()) {
-                player.setCurrentHP(player.getMaxHP());
-                return;
             }
         }
 
-
-        if(player.getCurrentHP() >= player.getMaxHP()) {
+        if (player.getCurrentHP() >= player.getMaxHP()) {
             player.setCurrentHP(player.getMaxHP());
         }
     }

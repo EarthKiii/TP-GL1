@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Player {
     private String playerName;
     private String avatarName;
-    private String avatarClass;
+    private AvatarClass avatarClass;
 
     private int money;
 
@@ -18,10 +18,7 @@ public class Player {
 
     public HashMap<String, Integer> abilities;
     public ArrayList<String> inventory;
-    public Player(String playerName, String avatarName, String avatarClass, int money, ArrayList<String> inventory) {
-        if (!avatarClass.equals("ARCHER") && !avatarClass.equals("ADVENTURER") && !avatarClass.equals("DWARF") ) {
-            return;
-        }
+    public Player(String playerName, String avatarName, AvatarClass avatarClass, int money, ArrayList<String> inventory) {
 
         this.playerName = playerName;
         this.avatarName = avatarName;
@@ -31,7 +28,7 @@ public class Player {
         this.abilities = UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1);
     }
 
-    public String getAvatarClass () {
+    public AvatarClass getAvatarClass () {
         return avatarClass;
     }
 
@@ -86,7 +83,7 @@ public class Player {
         this.avatarName = avatarName;
     }
 
-    public void setAvatarClass(String avatarClass) {
+    public void setAvatarClass(AvatarClass avatarClass) {
         this.avatarClass = avatarClass;
     }
 
