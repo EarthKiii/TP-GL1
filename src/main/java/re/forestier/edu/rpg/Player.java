@@ -2,6 +2,7 @@ package re.forestier.edu.rpg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Player {
     private String playerName;
@@ -16,7 +17,7 @@ public class Player {
     private int xp;
 
 
-    public HashMap<String, Integer> abilities;
+    public Map<Ability, Integer> abilities;
     public ArrayList<String> inventory;
     public Player(String playerName, String avatarName, AvatarClass avatarClass, int money, ArrayList<String> inventory) {
 
@@ -44,7 +45,7 @@ public class Player {
     }
     public int retrieveLevel() {
         // (lvl-1) * 10 + round((lvl * xplvl-1)/4)
-        HashMap<Integer, Integer> levels = new HashMap<>();
+        Map<Integer, Integer> levels = new HashMap<>();
         levels.put(2,10); // 1*10 + ((2*0)/4)
         levels.put(3,27); // 2*10 + ((3*10)/4)
         levels.put(4,57); // 3*10 + ((4*27)/4)

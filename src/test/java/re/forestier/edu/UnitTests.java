@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map;
 
 public class UnitTests {
     Player getDefaultFlorian() {
@@ -96,7 +97,7 @@ public class UnitTests {
     void testLevelUpgrade() {
         Player p = getDefaultFlorian();
 
-        HashMap<Integer, Integer> levels = new HashMap<>();
+        Map<Integer, Integer> levels = new HashMap<>();
         levels.put(2,10); // 1*10 + ((2*0)/4)
         levels.put(3,27); // 2*10 + ((3*10)/4)
         levels.put(4,57); // 3*10 + ((4*27)/4)
