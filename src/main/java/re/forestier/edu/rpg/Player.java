@@ -20,13 +20,12 @@ public class Player {
     public Map<Ability, Integer> abilities;
     public ArrayList<String> inventory;
     public Player(String playerName, String avatarName, AvatarClass avatarClass, int money, ArrayList<String> inventory) {
-
         this.playerName = playerName;
         this.avatarName = avatarName;
         this.avatarClass = avatarClass;
         this.money = money;
         this.inventory = inventory;
-        this.abilities = UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1);
+        this.abilities = new HashMap<>(UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1));
     }
 
     public AvatarClass getAvatarClass () {

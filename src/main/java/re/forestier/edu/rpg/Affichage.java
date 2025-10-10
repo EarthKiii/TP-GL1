@@ -1,19 +1,23 @@
 package re.forestier.edu.rpg;
 
+import java.util.Map.Entry;
+
 public class Affichage {
 
     public static String afficherJoueur(Player player) {
-        final String[] finalString = {"Joueur " + player.getAvatarName() + " joué par " + player.getPlayerName()};
-        finalString[0] += "\nNiveau : " + player.retrieveLevel() + " (XP totale : " + player.getXp() + ")";
-        finalString[0] += "\n\nCapacités :";
-        player.abilities.forEach((name, level) -> {
-            finalString[0] += "\n   " + name + " : " + level;
-        });
-        finalString[0] += "\n\nInventaire :";
-        player.inventory.forEach(item -> {
-            finalString[0] += "\n   " + item;
-        });
+        return String.format("""
+Joueur %s joué par %s
+Niveau : %d (XP totale : %d)
 
-        return finalString[0];
+Capacités :%s
+
+Inventaire :%s""",
+                player.getAvatarName(),
+                player.getPlayerName(),
+                player.retrieveLevel(),
+                player.getXp(),
+                String.join("",player.abilities.entrySet().stream().sorted(Entry.comparingByKey()).map(capacity -> "\n   " + capacity.getKey() + " : " + capacity.getValue()).toList()),
+                String.join("",player.inventory.stream().sorted().map(item -> "\n   " + item).toList())
+        );
     }
 }

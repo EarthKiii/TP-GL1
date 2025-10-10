@@ -119,7 +119,7 @@ public class UpdatePlayer {
         if (player.getCurrentHP() < player.getMaxHP() /2) {
             switch (player.getAvatarClass()) {
                 case ADVENTURER:
-                    player.addHP(player.retrieveLevel() < 3 ? 2 : 1);
+                    player.addHP(player.retrieveLevel() < 3 ? 1 : 2);
                     break;
                 case DWARF:
                     player.addHP(1);
