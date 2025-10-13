@@ -1,35 +1,33 @@
-package re.forestier.edu.rpg;
+package re.forestier.edu.rpg.playerclass;
+
+import re.forestier.edu.rpg.Ability;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
-    private String playerName;
-    private String avatarName;
-    private AvatarClass avatarClass;
+public abstract class Player {
+    private final String playerName;
+    private final String avatarName;
 
-    private int money;
+    protected int money;
 
-    private int level;
-    private int maxHP;
-    private int currentHP;
-    private int xp;
+    protected int level;
+    protected int maxHP;
+    protected int currentHP;
+    protected int xp;
 
+    protected Map<Integer, Map<Ability, Integer>> abilitiesMap;
+    protected Map<Ability, Integer> currentAbilities;
 
-    public Map<Ability, Integer> abilities;
     public ArrayList<String> inventory;
-    public Player(String playerName, String avatarName, AvatarClass avatarClass, int money, ArrayList<String> inventory) {
+    public Player(String playerName, String avatarName, int money, ArrayList<String> inventory) {
         this.playerName = playerName;
         this.avatarName = avatarName;
-        this.avatarClass = avatarClass;
         this.money = money;
         this.inventory = inventory;
-        this.abilities = new HashMap<>(UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1));
-    }
-
-    public AvatarClass getAvatarClass () {
-        return avatarClass;
+        currentAbilities = new HashMap<>(getAbilitiesMap().get(1));
+        // this.abilities = new HashMap<>(UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1));
     }
 
     public void removeMoney(int amount) throws IllegalArgumentException {
@@ -39,9 +37,11 @@ public class Player {
 
         money -= amount;
     }
+
     public void addMoney(int amount) {
         money += amount;
     }
+
     public int retrieveLevel() {
         // (lvl-1) * 10 + round((lvl * xplvl-1)/4)
         Map<Integer, Integer> levels = new HashMap<>();
@@ -71,20 +71,8 @@ public class Player {
         return playerName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
-
     public String getAvatarName() {
         return avatarName;
-    }
-
-    public void setAvatarName(String avatarName) {
-        this.avatarName = avatarName;
-    }
-
-    public void setAvatarClass(AvatarClass avatarClass) {
-        this.avatarClass = avatarClass;
     }
 
     public void setLevel(int level) {
@@ -108,11 +96,17 @@ public class Player {
     }
 
     public void addHP(int hp) {
-        if (hp > 0 && currentHP <= maxHP) this.currentHP += hp;
+        if (currentHP + hp > maxHP && hp < 0) {
+            throw new IllegalArgumentException("Player can't have a negative HPs!");
+        }
+        currentHP += hp;
     }
 
     public void removeHP(int hp) {
-        if (hp > 0 && currentHP - hp >= 0) this.currentHP -= hp;
+        if (currentHP - hp < 0 && hp < 0) {
+            throw new IllegalArgumentException("Player can't have a more than max HPs!");
+        }
+        currentHP -= hp;
     }
 
     public void setXp(int xp) {
@@ -121,6 +115,12 @@ public class Player {
 
     public int getMoney() {
         return money;
+    }
+
+    public abstract void endOfTurn();
+
+    protected Map<Integer, Map<Ability, Integer>> getAbilitiesMap() {
+        return abilitiesMap;
     }
 /*
     Ингредиенты:

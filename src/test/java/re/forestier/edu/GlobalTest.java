@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import re.forestier.edu.rpg.Affichage;
 import re.forestier.edu.rpg.AvatarClass;
 import re.forestier.edu.rpg.UpdatePlayer;
-import re.forestier.edu.rpg.Player;
+import re.forestier.edu.rpg.playerclass.Player;
 
 import java.util.ArrayList;
 

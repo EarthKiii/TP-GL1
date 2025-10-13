@@ -1,5 +1,7 @@
 package re.forestier.edu.rpg;
 
+import re.forestier.edu.rpg.playerclass.Player;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
