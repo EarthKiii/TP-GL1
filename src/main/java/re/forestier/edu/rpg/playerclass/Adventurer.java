@@ -9,11 +9,12 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public class Adventurer extends Player {
-    public Map<Ability, Integer> abilities;
-    public Adventurer(String playerName, String avatarName, int money, ArrayList<String> inventory) {
-        super(playerName, avatarName, money, inventory);
+    private Adventurer(String playerName, String avatarName, int money, Items inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
+        super(playerName, avatarName, money, inventory, abilitiesMap);
+    }
 
-        abilitiesMap = Map.ofEntries(
+    public Adventurer(String playerName, String avatarName, int money, Items inventory) {
+        this(playerName, avatarName, money, inventory, Map.ofEntries(
                 entry(1, Map.ofEntries(
                         entry(Ability.INT, 1),
                         entry(Ability.DEF, 1),
@@ -35,11 +36,11 @@ public class Adventurer extends Player {
                         entry(Ability.VIS, 1),
                         entry(Ability.DEF, 4)
                 ))
-        );
+        ));
     }
 
     @Override
-    public void endOfTurn() {
+    protected void endOfTurnUpdate() {
         addHP(retrieveLevel() < 3 ? 1 : 2);
     }
 /*

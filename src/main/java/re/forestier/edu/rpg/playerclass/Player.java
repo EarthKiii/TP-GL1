@@ -5,6 +5,7 @@ import re.forestier.edu.rpg.Ability;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public abstract class Player {
     private final String playerName;
@@ -19,15 +20,21 @@ public abstract class Player {
 
     protected Map<Integer, Map<Ability, Integer>> abilitiesMap;
     protected Map<Ability, Integer> currentAbilities;
+    protected Items inventory;
 
-    public ArrayList<String> inventory;
-    public Player(String playerName, String avatarName, int money, ArrayList<String> inventory) {
+    private final static String[] itemsList = {"Lookout Ring : Prevents surprise attacks","Scroll of Stupidity : INT-2 when applied to an enemy", "Draupnir : Increases XP gained by 100%", "Magic Charm : Magic +10 for 5 rounds", "Rune Staff of Curse : May burn your ennemies... Or yourself. Who knows?", "Combat Edge : Well, that's an edge", "Holy Elixir : Recover your HP"};
+
+    public int getLevel() {
+        return level;
+    }
+
+    public Player(String playerName, String avatarName, int money, Items inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
+        this.abilitiesMap = abilitiesMap;
         this.playerName = playerName;
         this.avatarName = avatarName;
         this.money = money;
         this.inventory = inventory;
-        currentAbilities = new HashMap<>(getAbilitiesMap().get(1));
-        // this.abilities = new HashMap<>(UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1));
+        currentAbilities = new HashMap<>(this.abilitiesMap.get(1));
     }
 
     public void removeMoney(int amount) throws IllegalArgumentException {
@@ -61,6 +68,28 @@ public abstract class Player {
         }
         if (xp < levels.get(5)) return 4;
         return 5;
+    }
+
+    public boolean addXp(int newXp) {
+        int currentLevel = retrieveLevel();
+        xp += newXp;
+        int newLevel = retrieveLevel();
+
+        if (newLevel != currentLevel) {
+            // Player leveled-up!
+            // Give a random object
+            ;
+            Random random = new Random();
+            inventory.add(itemsList[random.nextInt(itemsList.length)]);
+
+            // Add/upgrade abilities to player
+            Map<Ability, Integer> newAbilities = abilitiesMap.get(newLevel);
+            newAbilities.forEach((ability, level) -> {
+                currentAbilities.put(ability, newAbilities.get(ability));
+            });
+            return true;
+        }
+        return false;
     }
 
     public int getXp() {
@@ -117,11 +146,31 @@ public abstract class Player {
         return money;
     }
 
-    public abstract void endOfTurn();
-
-    protected Map<Integer, Map<Ability, Integer>> getAbilitiesMap() {
-        return abilitiesMap;
+    public Map<Ability, Integer> getCurrentAbilities() {
+        return currentAbilities;
     }
+
+    public ArrayList<String> getInventory() {
+        return inventory;
+    }
+
+    public void endOfTurn() {
+        if (currentHP == 0) {
+            System.out.println("Le joueur est KO !");
+            return;
+        }
+
+        if (currentHP < maxHP / 2) {
+            endOfTurnUpdate();
+        }
+
+        if (currentHP >= maxHP) {
+            currentHP = maxHP;
+        }
+
+    }
+
+    protected abstract void endOfTurnUpdate();
 /*
     Ингредиенты:
         Для теста:

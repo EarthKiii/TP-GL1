@@ -2,8 +2,8 @@ package re.forestier.edu;
 
 import org.junit.jupiter.api.Test;
 import re.forestier.edu.rpg.Affichage;
-import re.forestier.edu.rpg.AvatarClass;
-import re.forestier.edu.rpg.UpdatePlayer;
+import re.forestier.edu.rpg.playerclass.Adventurer;
+import re.forestier.edu.rpg.playerclass.Items;
 import re.forestier.edu.rpg.playerclass.Player;
 
 import java.util.ArrayList;
@@ -17,18 +17,18 @@ public class GlobalTest {
 
     @Test
     void testAffichageBase() {
-        Player player = new Player("Florian", "Gnognak le Barbare", AvatarClass.ADVENTURER, 200, new ArrayList<>());
-        UpdatePlayer.addXp(player, 1);
+        Player player = new Adventurer("Florian", "Gnognak le Barbare", 200, new Items());
+        player.addXp(1);
 
         verify(Affichage.afficherJoueur(player));
     }
 
     @Test
     void testAffichageInv() {
-        ArrayList<String> i = new ArrayList<>();
+        Items i = new Items();
         i.add("Holy Elixir");
-        Player player = new Player("Florian", "Gnognak le Barbare", AvatarClass.ADVENTURER, 200, i);
-        UpdatePlayer.addXp(player, 1);
+        Player player = new Adventurer("Florian", "Gnognak le Barbare", 200, i);
+        player.addXp(1);
 
         verify(Affichage.afficherJoueur(player));
     }

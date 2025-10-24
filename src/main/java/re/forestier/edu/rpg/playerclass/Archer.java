@@ -3,17 +3,42 @@ package re.forestier.edu.rpg.playerclass;
 import re.forestier.edu.rpg.Ability;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Map.entry;
+
 public class Archer extends Player {
-    public Map<Ability, Integer> abilities;
-    public Archer(String playerName, String avatarName, int money, ArrayList<String> inventory) {
-        super(playerName, avatarName, money, inventory);
-        // abilities = new HashMap<>(UpdatePlayer.abilitiesPerTypeAndLevel().get(this.avatarClass).get(1));
+    private Archer(String playerName, String avatarName, int money, Items inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
+        super(playerName, avatarName, money, inventory, abilitiesMap);
+    }
+
+    public Archer(String playerName, String avatarName, int money,Items inventory) {
+        this(playerName, avatarName, money, inventory, Map.ofEntries(
+                entry(1, Map.ofEntries(
+                        entry(Ability.INT, 1),
+                        entry(Ability.ATK, 3),
+                        entry(Ability.CHA, 1),
+                        entry(Ability.VIS, 3)
+                )),
+                entry(2, Map.ofEntries(
+                        entry(Ability.DEF, 1),
+                        entry(Ability.CHA, 2)
+                )),
+                entry(3, Map.ofEntries(
+                        entry(Ability.ATK, 3)
+                )),
+                entry(4, Map.ofEntries(
+                        entry(Ability.DEF, 2)
+                )),
+                entry(5, Map.ofEntries(
+                        entry(Ability.ATK, 4)
+                ))
+        ));
     }
 
     @Override
-    public void endOfTurn() {
+    protected void endOfTurnUpdate() {
         addHP(1);
         if (inventory.contains("Magic Bow")) {
             setCurrentHP(getCurrentHP() + getCurrentHP() / 8 - 1);

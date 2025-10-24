@@ -18,8 +18,8 @@ Inventaire :%s""",
                 player.getPlayerName(),
                 player.retrieveLevel(),
                 player.getXp(),
-                String.join("",player.abilities.entrySet().stream().sorted(Entry.comparingByKey()).map(capacity -> "\n   " + capacity.getKey() + " : " + capacity.getValue()).toList()),
-                String.join("",player.inventory.stream().sorted().map(item -> "\n   " + item).toList())
+                String.join("",player.getCurrentAbilities().entrySet().stream().sorted(Entry.comparingByKey()).map(capacity -> "\n   " + capacity.getKey() + " : " + capacity.getValue()).toList()),
+                String.join("",player.getInventory().stream().sorted().map(item -> "\n   " + item).toList())
         );
     }
 }

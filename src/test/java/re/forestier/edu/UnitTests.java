@@ -1,28 +1,26 @@
 package re.forestier.edu;
 
 import org.junit.jupiter.api.*;
-import re.forestier.edu.rpg.AvatarClass;
-import re.forestier.edu.rpg.UpdatePlayer;
-import re.forestier.edu.rpg.playerclass.Player;
+import re.forestier.edu.rpg.playerclass.*;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UnitTests {
     Player getDefaultFlorian() {
-        return new Player("Florian", "Grognak le barbare", AvatarClass.ADVENTURER, 100, new ArrayList<>());
+        return new Adventurer("Florian", "Grognak le barbare", 100, new Items());
     }
 
     @Test
     @DisplayName("Player name test")
     void testPlayerName() {
-        Player player = new Player("Florian", "Grognak le barbare", AvatarClass.ADVENTURER, 100, new ArrayList<>());
+        Player player = new Adventurer("Florian", "Grognak le barbare", 100, new Items());
         assertThat(player.getPlayerName(), is("Florian"));
     }
 
@@ -31,14 +29,6 @@ public class UnitTests {
     void testAvatarName() {
         Player player = getDefaultFlorian();
         assertThat(player.getAvatarName(), is("Grognak le barbare"));
-    }
-
-    @Test
-    @DisplayName("Get avatar class test")
-    void testGetAvatarClass() {
-        Player p = getDefaultFlorian();
-
-        assertThat(p.getAvatarClass(), is(AvatarClass.ADVENTURER));
     }
 
     @Test
@@ -54,10 +44,8 @@ public class UnitTests {
     void testGetInventory() {
         Player p = getDefaultFlorian();
 
-        assertThat(p.inventory.size(), is(0));
+        assertThat(p.getInventory().size(), is(0));
     }
-
-
 
     @Test
     @DisplayName("Impossible to have negative money")
@@ -103,7 +91,7 @@ public class UnitTests {
         levels.put(5,111); // 4*10 + ((5*57)/4)
 
         for (Map.Entry<Integer, Integer> level: levels.entrySet()) {
-            boolean newLevel = UpdatePlayer.addXp(p, level.getValue() - p.getXp());
+            boolean newLevel = p.addXp(level.getValue() - p.getXp());
             assertThat(p.retrieveLevel(), is(level.getKey()));
             assertThat(newLevel, is(true));
         }
@@ -114,7 +102,7 @@ public class UnitTests {
     void testLowXpGain() {
         Player p = getDefaultFlorian();
 
-        boolean newLevel = UpdatePlayer.addXp(p, 5);
+        boolean newLevel = p.addXp(5);
         assertThat(p.retrieveLevel(), is(1));
         assertThat(p.getXp(), is(5));
         assertThat(newLevel, is(false));
@@ -128,53 +116,53 @@ public class UnitTests {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
         System.setOut(new PrintStream(outContent));
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(outContent.toString(), is("Le joueur est KO !\n"));
     }
 
     @Test
     @DisplayName("Dwarf potion fin de tour test")
     void testPotionInventaire() {
-        ArrayList<String> i = new ArrayList<>();
+        Items i = new Items();
         i.add("Holy Elixir");
 
-        Player p = new Player("Florian", "Grognak le nain", AvatarClass.DWARF, 100, i);
+        Player p = new Dwarf("Florian", "Grognak le nain", 100, i);
         p.setCurrentHP(1);
         p.setMaxHP(10);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(3));
     }
 
     @Test
     @DisplayName("Dwarf No Potion fin de tour test")
     void testNoPotionInventaire() {
-        Player p = new Player("Florian", "Grognak le nain", AvatarClass.DWARF, 100, new ArrayList<>());
+        Player p = new Dwarf("Florian", "Grognak le nain", 100, new Items());
         p.setCurrentHP(1);
         p.setMaxHP(10);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(2));
     }
 
     @Test
     @DisplayName("Archer Magic Bow fin de tour test")
     void testMagicBowInventaire() {
-        ArrayList<String> i = new ArrayList<>();
+        Items i = new Items();
         i.add("Magic Bow");
 
-        Player p = new Player("Florian", "Grognak l'archer", AvatarClass.ARCHER, 100, i);
+        Player p = new Archer("Florian", "Grognak l'archer", 100, i);
         p.setCurrentHP(1);
         p.setMaxHP(10);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(1));
     }
 
     @Test
     @DisplayName("Archer No Magic Bow fin de tour test")
     void testNoMagicBowInventaire() {
-        Player p = new Player("Florian", "Grognak l'archer", AvatarClass.ARCHER, 100, new ArrayList<>());
+        Player p = new Archer("Florian", "Grognak l'archer", 100, new Items());
         p.setCurrentHP(1);
         p.setMaxHP(10);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(2));
     }
 
@@ -184,7 +172,7 @@ public class UnitTests {
         Player p = getDefaultFlorian();
         p.setCurrentHP(1);
         p.setMaxHP(10);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(2));
     }
 
@@ -194,8 +182,8 @@ public class UnitTests {
         Player p = getDefaultFlorian();
         p.setCurrentHP(1);
         p.setMaxHP(10);
-        UpdatePlayer.addXp(p, 27);
-        UpdatePlayer.majFinDeTour(p);
+        p.addXp(27);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(3));
     }
 
@@ -205,7 +193,7 @@ public class UnitTests {
         Player p = getDefaultFlorian();
         p.setCurrentHP(2);
         p.setMaxHP(4);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(2));
     }
 
@@ -215,7 +203,7 @@ public class UnitTests {
         Player p = getDefaultFlorian();
         p.setCurrentHP(3);
         p.setMaxHP(4);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(3));
     }
 
@@ -225,7 +213,7 @@ public class UnitTests {
         Player p = getDefaultFlorian();
         p.setCurrentHP(4);
         p.setMaxHP(4);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(4));
     }
 
@@ -235,7 +223,7 @@ public class UnitTests {
         Player p = getDefaultFlorian();
         p.setCurrentHP(5);
         p.setMaxHP(4);
-        UpdatePlayer.majFinDeTour(p);
+        p.endOfTurn();
         assertThat(p.getCurrentHP(), is(4));
     }
 }
