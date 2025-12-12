@@ -1,6 +1,7 @@
 package re.forestier.edu.rpg.playerclass;
 
 import re.forestier.edu.rpg.Ability;
+import re.forestier.edu.rpg.Item;
 import re.forestier.edu.rpg.Items;
 import re.forestier.edu.rpg.ItemArray;
 
@@ -138,9 +139,9 @@ public abstract class Player {
         return inventory;
     }
 
-    public void sellItem(String itemName, int price) {
-        if (inventory.remove(itemName)) {
-            addMoney(price);
+    public void sell(Item item) {
+        if (inventory.remove(item)) {
+            addMoney(item.getValue());
         } else {
             System.out.println("L'objet n'est pas dans l'inventaire.");
         }
