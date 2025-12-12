@@ -1,19 +1,19 @@
 package re.forestier.edu.rpg.playerclass;
 
 import re.forestier.edu.rpg.Ability;
+import re.forestier.edu.rpg.ItemArray;
+import re.forestier.edu.rpg.Items;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
 public class Archer extends Player {
-    private Archer(String playerName, String avatarName, int money, Items inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
+    private Archer(String playerName, String avatarName, int money, ItemArray inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
         super(playerName, avatarName, money, inventory, abilitiesMap);
     }
 
-    public Archer(String playerName, String avatarName, int money,Items inventory) {
+    public Archer(String playerName, String avatarName, int money, ItemArray inventory) {
         this(playerName, avatarName, money, inventory, Map.ofEntries(
                 entry(1, Map.ofEntries(
                         entry(Ability.INT, 1),
@@ -40,19 +40,8 @@ public class Archer extends Player {
     @Override
     protected void endOfTurnUpdate() {
         addHP(1);
-        if (inventory.contains("Magic Bow")) {
+        if (inventory.contains(Items.MAGIC_BOW)) {
             setCurrentHP(getCurrentHP() + getCurrentHP() / 8 - 1);
         }
     }
-/*
-    Ингредиенты:
-        Для теста:
-
-            250 г муки
-            125 г сливочного масла (холодное)
-            70 г сахара
-            1 яйцо
-            1 щепотка соли
-     */
-
 }

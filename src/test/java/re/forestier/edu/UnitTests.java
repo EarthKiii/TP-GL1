@@ -1,6 +1,8 @@
 package re.forestier.edu;
 
 import org.junit.jupiter.api.*;
+import re.forestier.edu.rpg.ItemArray;
+import re.forestier.edu.rpg.Items;
 import re.forestier.edu.rpg.playerclass.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,13 +16,13 @@ import java.util.Map;
 
 public class UnitTests {
     Player getDefaultFlorian() {
-        return new Adventurer("Florian", "Grognak le barbare", 100, new Items());
+        return new Adventurer("Florian", "Grognak le barbare", 100, new ItemArray());
     }
 
     @Test
     @DisplayName("Player name test")
     void testPlayerName() {
-        Player player = new Adventurer("Florian", "Grognak le barbare", 100, new Items());
+        Player player = new Adventurer("Florian", "Grognak le barbare", 100, new ItemArray());
         assertThat(player.getPlayerName(), is("Florian"));
     }
 
@@ -92,7 +94,7 @@ public class UnitTests {
 
         for (Map.Entry<Integer, Integer> level: levels.entrySet()) {
             boolean newLevel = p.addXp(level.getValue() - p.getXp());
-            assertThat(p.retrieveLevel(), is(level.getKey()));
+            assertThat(p.getLevel(), is(level.getKey()));
             assertThat(newLevel, is(true));
         }
     }
@@ -103,7 +105,7 @@ public class UnitTests {
         Player p = getDefaultFlorian();
 
         boolean newLevel = p.addXp(5);
-        assertThat(p.retrieveLevel(), is(1));
+        assertThat(p.getLevel(), is(1));
         assertThat(p.getXp(), is(5));
         assertThat(newLevel, is(false));
     }
@@ -123,8 +125,8 @@ public class UnitTests {
     @Test
     @DisplayName("Dwarf potion fin de tour test")
     void testPotionInventaire() {
-        Items i = new Items();
-        i.add("Holy Elixir");
+        ItemArray i = new ItemArray();
+        i.add(Items.HOLY_ELIXIR);
 
         Player p = new Dwarf("Florian", "Grognak le nain", 100, i);
         p.setCurrentHP(1);
@@ -136,7 +138,7 @@ public class UnitTests {
     @Test
     @DisplayName("Dwarf No Potion fin de tour test")
     void testNoPotionInventaire() {
-        Player p = new Dwarf("Florian", "Grognak le nain", 100, new Items());
+        Player p = new Dwarf("Florian", "Grognak le nain", 100, new ItemArray());
         p.setCurrentHP(1);
         p.setMaxHP(10);
         p.endOfTurn();
@@ -146,8 +148,8 @@ public class UnitTests {
     @Test
     @DisplayName("Archer Magic Bow fin de tour test")
     void testMagicBowInventaire() {
-        Items i = new Items();
-        i.add("Magic Bow");
+        ItemArray i = new ItemArray();
+        i.add(Items.MAGIC_BOW);
 
         Player p = new Archer("Florian", "Grognak l'archer", 100, i);
         p.setCurrentHP(1);
@@ -159,7 +161,7 @@ public class UnitTests {
     @Test
     @DisplayName("Archer No Magic Bow fin de tour test")
     void testNoMagicBowInventaire() {
-        Player p = new Archer("Florian", "Grognak l'archer", 100, new Items());
+        Player p = new Archer("Florian", "Grognak l'archer", 100, new ItemArray());
         p.setCurrentHP(1);
         p.setMaxHP(10);
         p.endOfTurn();

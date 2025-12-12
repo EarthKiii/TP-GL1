@@ -1,19 +1,18 @@
 package re.forestier.edu.rpg.playerclass;
 
 import re.forestier.edu.rpg.Ability;
+import re.forestier.edu.rpg.ItemArray;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
 public class Adventurer extends Player {
-    private Adventurer(String playerName, String avatarName, int money, Items inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
+    private Adventurer(String playerName, String avatarName, int money, ItemArray inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
         super(playerName, avatarName, money, inventory, abilitiesMap);
     }
 
-    public Adventurer(String playerName, String avatarName, int money, Items inventory) {
+    public Adventurer(String playerName, String avatarName, int money, ItemArray inventory) {
         this(playerName, avatarName, money, inventory, Map.ofEntries(
                 entry(1, Map.ofEntries(
                         entry(Ability.INT, 1),
@@ -41,17 +40,6 @@ public class Adventurer extends Player {
 
     @Override
     protected void endOfTurnUpdate() {
-        addHP(retrieveLevel() < 3 ? 1 : 2);
+        addHP(level < 3 ? 1 : 2);
     }
-/*
-    Ингредиенты:
-        Для теста:
-
-            250 г муки
-            125 г сливочного масла (холодное)
-            70 г сахара
-            1 яйцо
-            1 щепотка соли
-     */
-
 }

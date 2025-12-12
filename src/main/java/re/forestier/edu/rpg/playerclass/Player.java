@@ -1,11 +1,10 @@
 package re.forestier.edu.rpg.playerclass;
 
 import re.forestier.edu.rpg.Ability;
+import re.forestier.edu.rpg.Items;
+import re.forestier.edu.rpg.ItemArray;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public abstract class Player {
     private final String playerName;
@@ -18,23 +17,29 @@ public abstract class Player {
     protected int currentHP;
     protected int xp;
 
+    protected int nextLevelMinXp;
+
     protected Map<Integer, Map<Ability, Integer>> abilitiesMap;
     protected Map<Ability, Integer> currentAbilities;
-    protected Items inventory;
-
-    private final static String[] itemsList = {"Lookout Ring : Prevents surprise attacks","Scroll of Stupidity : INT-2 when applied to an enemy", "Draupnir : Increases XP gained by 100%", "Magic Charm : Magic +10 for 5 rounds", "Rune Staff of Curse : May burn your ennemies... Or yourself. Who knows?", "Combat Edge : Well, that's an edge", "Holy Elixir : Recover your HP"};
+    protected ItemArray inventory;
 
     public int getLevel() {
         return level;
     }
 
-    public Player(String playerName, String avatarName, int money, Items inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
+    public Player(String playerName, String avatarName, int money, ItemArray inventory, Map<Integer, Map<Ability, Integer>> abilitiesMap) {
         this.abilitiesMap = abilitiesMap;
         this.playerName = playerName;
         this.avatarName = avatarName;
         this.money = money;
         this.inventory = inventory;
+        this.level = 1;
+        updateNextLevelMinXp();
         currentAbilities = new HashMap<>(this.abilitiesMap.get(1));
+    }
+
+    private void updateNextLevelMinXp() {
+        nextLevelMinXp = level * 10 + Math.round((float) ((level + 1) * nextLevelMinXp) / 4);
     }
 
     public void removeMoney(int amount) throws IllegalArgumentException {
@@ -49,47 +54,26 @@ public abstract class Player {
         money += amount;
     }
 
-    public int retrieveLevel() {
-        // (lvl-1) * 10 + round((lvl * xplvl-1)/4)
-        Map<Integer, Integer> levels = new HashMap<>();
-        levels.put(2,10); // 1*10 + ((2*0)/4)
-        levels.put(3,27); // 2*10 + ((3*10)/4)
-        levels.put(4,57); // 3*10 + ((4*27)/4)
-        levels.put(5,111); // 4*10 + ((5*57)/4)
-        //TODO : ajouter les prochains niveaux
-
-        if (xp < levels.get(2)) {
-            return 1;
-        }
-        else if (xp < levels.get(3)) {return 2;
-        }
-        if (xp < levels.get(4)) {
-            return 3;
-        }
-        if (xp < levels.get(5)) return 4;
-        return 5;
-    }
-
     public boolean addXp(int newXp) {
-        int currentLevel = retrieveLevel();
         xp += newXp;
-        int newLevel = retrieveLevel();
-
-        if (newLevel != currentLevel) {
+        boolean newLevel = false;
+        while (xp >= nextLevelMinXp) {
+            updateNextLevelMinXp();
+            level += 1;
             // Player leveled-up!
             // Give a random object
             ;
             Random random = new Random();
-            inventory.add(itemsList[random.nextInt(itemsList.length)]);
+            inventory.add(Items.ALL_ITEMS.get(random.nextInt(Items.ALL_ITEMS.size())));
 
             // Add/upgrade abilities to player
-            Map<Ability, Integer> newAbilities = abilitiesMap.get(newLevel);
+            Map<Ability, Integer> newAbilities = abilitiesMap.get(level);
             newAbilities.forEach((ability, level) -> {
                 currentAbilities.put(ability, newAbilities.get(ability));
             });
-            return true;
+            if (!newLevel) newLevel = true;
         }
-        return false;
+        return newLevel;
     }
 
     public int getXp() {
@@ -150,8 +134,16 @@ public abstract class Player {
         return currentAbilities;
     }
 
-    public ArrayList<String> getInventory() {
+    public ItemArray getInventory() {
         return inventory;
+    }
+
+    public void sellItem(String itemName, int price) {
+        if (inventory.remove(itemName)) {
+            addMoney(price);
+        } else {
+            System.out.println("L'objet n'est pas dans l'inventaire.");
+        }
     }
 
     public void endOfTurn() {
@@ -170,16 +162,5 @@ public abstract class Player {
 
     }
 
-    protected abstract void endOfTurnUpdate();
-/*
-    Ингредиенты:
-        Для теста:
-
-            250 г муки
-            125 г сливочного масла (холодное)
-            70 г сахара
-            1 яйцо
-            1 щепотка соли
-     */
-
+    protected void endOfTurnUpdate() {};
 }

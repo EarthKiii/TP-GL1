@@ -16,7 +16,7 @@ Capacités :%s
 Inventaire :%s""",
                 player.getAvatarName(),
                 player.getPlayerName(),
-                player.retrieveLevel(),
+                player.getLevel(),
                 player.getXp(),
                 String.join("",player.getCurrentAbilities().entrySet().stream().sorted(Entry.comparingByKey()).map(capacity -> "\n   " + capacity.getKey() + " : " + capacity.getValue()).toList()),
                 String.join("",player.getInventory().stream().sorted().map(item -> "\n   " + item).toList())
