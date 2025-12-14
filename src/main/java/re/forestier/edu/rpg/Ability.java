@@ -1,10 +1,10 @@
 package re.forestier.edu.rpg;
 
 public enum Ability {
-    INT,
-    DEF,
+    ALC,
     ATK,
     CHA,
-    ALC,
+    DEF,
+    INT,
     VIS
 }

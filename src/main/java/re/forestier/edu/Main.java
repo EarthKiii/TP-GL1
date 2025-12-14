@@ -10,6 +10,7 @@ public class Main {
         firstPlayer.addMoney(400);
 
         firstPlayer.addXp(15);
+
         System.out.println(Affichage.afficherJoueur(firstPlayer));
         System.out.println("------------------");
         firstPlayer.addXp(20);

@@ -1,6 +1,6 @@
 package re.forestier.edu.rpg;
 
-public class Item {
+public class Item implements Comparable<Item> {
     private final String name;
     private final String description;
     private final int weight;
@@ -40,5 +40,13 @@ public class Item {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Item item) {
+        if (this.value != item.value) {
+            return CharSequence.compare(this.name, item.name);
+        }
+        return 0;
     }
 }
