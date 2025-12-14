@@ -22,4 +22,21 @@ Inventaire :%s""",
                 String.join("",player.getInventory().stream().sorted().map(item -> "\n   " + item).toList())
         );
     }
+
+    public static String afficherJoueurMd(Player player) {
+        return String.format("""
+# Joueur *%s* joué par *%s*
+## Niveau : %d *(XP totale : %d)*
+
+## Capacités :%s
+
+## Inventaire :%s""",
+                player.getAvatarName(),
+                player.getPlayerName(),
+                player.getLevel(),
+                player.getXp(),
+                String.join("",player.getCurrentAbilities().entrySet().stream().sorted(Entry.comparingByKey()).map(capacity -> "\n* **" + capacity.getKey() + "** : " + capacity.getValue()).toList()),
+                String.join("",player.getInventory().stream().sorted().map(item -> "\n* *" + item + "*").toList())
+        );
+    }
 }

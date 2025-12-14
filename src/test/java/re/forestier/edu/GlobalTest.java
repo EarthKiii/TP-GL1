@@ -42,7 +42,7 @@ public class GlobalTest {
         ItemArray i = new ItemArray();
         i.add(Items.HOLY_ELIXIR);
         Player player = new Adventurer("Florian", "Gnognak le Barbare", 200, i);
-        player.addXp(15);
+        player.addXp(1);
 
         verify(Affichage.afficherJoueurMd(player));
     }
